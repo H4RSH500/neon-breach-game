@@ -20,6 +20,7 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
+  overscroll-behavior: none;
   background:
     radial-gradient(circle at 55% 20%, rgba(25, 230, 255, 0.12), transparent 28rem),
     linear-gradient(135deg, #05060a, #0b1015 45%, #05070d);
@@ -46,9 +47,76 @@ button {
   aspect-ratio: 16 / 9;
   border: 1px solid rgba(25, 230, 255, 0.34);
   background: #05070a;
+  touch-action: none;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.05) inset,
     0 0 48px rgba(25, 230, 255, 0.16);
+}
+
+.touch-controls {
+  position: absolute;
+  inset: auto 0 24px;
+  z-index: 3;
+  display: none;
+  align-items: end;
+  justify-content: space-between;
+  padding: 0 max(18px, env(safe-area-inset-left)) 0 max(18px, env(safe-area-inset-right));
+  pointer-events: none;
+}
+
+.joystick,
+.pulse-button {
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.joystick {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  border: 1px solid rgba(25, 230, 255, 0.55);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(25, 230, 255, 0.2), transparent 58%),
+    rgba(4, 12, 18, 0.62);
+  box-shadow: 0 0 28px rgba(25, 230, 255, 0.18);
+}
+
+.joystick span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(108, 255, 157, 0.86);
+  border-radius: 50%;
+  background: rgba(108, 255, 157, 0.2);
+  box-shadow: 0 0 20px rgba(108, 255, 157, 0.36);
+  transform: translate(-50%, -50%);
+}
+
+.pulse-button {
+  width: 106px;
+  height: 106px;
+  border: 1px solid rgba(255, 77, 125, 0.72);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 77, 125, 0.28), rgba(255, 77, 125, 0.08) 58%, rgba(5, 10, 16, 0.72)),
+    rgba(5, 10, 16, 0.72);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 0 0 30px rgba(255, 77, 125, 0.2);
+}
+
+.pulse-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 34px rgba(255, 77, 125, 0.42);
 }
 
 .hud {
@@ -193,7 +261,7 @@ h1 {
 
   .hud {
     top: auto;
-    bottom: 12px;
+    bottom: 144px;
     min-width: 0;
     width: calc(50% - 18px);
     padding: 10px;
@@ -217,5 +285,32 @@ h1 {
 
   .hud p {
     font-size: 0.76rem;
+  }
+}
+
+@media (pointer: coarse), (max-width: 820px) {
+  .touch-controls {
+    display: flex;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .hud {
+    top: 10px;
+    bottom: auto;
+  }
+
+  .touch-controls {
+    bottom: 14px;
+  }
+
+  .joystick {
+    width: 96px;
+    height: 96px;
+  }
+
+  .pulse-button {
+    width: 92px;
+    height: 92px;
   }
 }

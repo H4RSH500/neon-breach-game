@@ -7,12 +7,21 @@ const healthBar = document.querySelector("#healthBar");
 const chargeBar = document.querySelector("#chargeBar");
 const overlay = document.querySelector("#overlay");
 const startButton = document.querySelector("#startButton");
+const joystick = document.querySelector("#joystick");
+const joystickKnob = document.querySelector("#joystickKnob");
+const pulseButton = document.querySelector("#pulseButton");
 
 const W = canvas.width;
 const H = canvas.height;
 const keys = new Set();
 const rand = (min, max) => min + Math.random() * (max - min);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const touchInput = {
+  active: false,
+  pointerId: null,
+  x: 0,
+  y: 0,
+};
 
 let state = "menu";
 let score = 0;
@@ -147,8 +156,10 @@ function update(dt) {
   player.invulnerable = Math.max(0, player.invulnerable - dt);
   player.charge = clamp(player.charge + dt * 9, 0, 100);
 
-  const ax = (keys.has("ArrowRight") || keys.has("KeyD") ? 1 : 0) - (keys.has("ArrowLeft") || keys.has("KeyA") ? 1 : 0);
-  const ay = (keys.has("ArrowDown") || keys.has("KeyS") ? 1 : 0) - (keys.has("ArrowUp") || keys.has("KeyW") ? 1 : 0);
+  const keyboardX = (keys.has("ArrowRight") || keys.has("KeyD") ? 1 : 0) - (keys.has("ArrowLeft") || keys.has("KeyA") ? 1 : 0);
+  const keyboardY = (keys.has("ArrowDown") || keys.has("KeyS") ? 1 : 0) - (keys.has("ArrowUp") || keys.has("KeyW") ? 1 : 0);
+  const ax = clamp(keyboardX + touchInput.x, -1, 1);
+  const ay = clamp(keyboardY + touchInput.y, -1, 1);
   player.vx += ax * 1650 * dt;
   player.vy += ay * 1650 * dt;
   player.vx *= Math.pow(0.001, dt);
@@ -371,6 +382,56 @@ window.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("keyup", (event) => keys.delete(event.code));
+
+function updateJoystick(pointerEvent) {
+  const rect = joystick.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  const maxDistance = rect.width * 0.34;
+  const dx = pointerEvent.clientX - centerX;
+  const dy = pointerEvent.clientY - centerY;
+  const distance = Math.hypot(dx, dy);
+  const limitedDistance = Math.min(distance, maxDistance);
+  const angle = Math.atan2(dy, dx);
+  const knobX = Math.cos(angle) * limitedDistance;
+  const knobY = Math.sin(angle) * limitedDistance;
+
+  touchInput.x = distance ? clamp(dx / maxDistance, -1, 1) : 0;
+  touchInput.y = distance ? clamp(dy / maxDistance, -1, 1) : 0;
+  joystickKnob.style.transform = `translate(calc(-50% + ${knobX}px), calc(-50% + ${knobY}px))`;
+}
+
+function resetJoystick() {
+  touchInput.active = false;
+  touchInput.pointerId = null;
+  touchInput.x = 0;
+  touchInput.y = 0;
+  joystickKnob.style.transform = "translate(-50%, -50%)";
+}
+
+joystick.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  touchInput.active = true;
+  touchInput.pointerId = event.pointerId;
+  joystick.setPointerCapture(event.pointerId);
+  updateJoystick(event);
+});
+
+joystick.addEventListener("pointermove", (event) => {
+  if (!touchInput.active || event.pointerId !== touchInput.pointerId) return;
+  event.preventDefault();
+  updateJoystick(event);
+});
+
+joystick.addEventListener("pointerup", resetJoystick);
+joystick.addEventListener("pointercancel", resetJoystick);
+
+pulseButton.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  pulse();
+});
+
+window.addEventListener("contextmenu", (event) => event.preventDefault());
 startButton.addEventListener("click", () => {
   if (state === "paused") {
     state = "running";
