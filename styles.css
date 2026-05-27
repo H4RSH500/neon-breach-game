@@ -1,0 +1,221 @@
+:root {
+  color-scheme: dark;
+  --bg: #06070b;
+  --panel: rgba(9, 18, 28, 0.72);
+  --text: #e9fbff;
+  --muted: #7f9aa5;
+  --cyan: #19e6ff;
+  --green: #6cff9d;
+  --amber: #ffcf5a;
+  --red: #ff4d7d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 55% 20%, rgba(25, 230, 255, 0.12), transparent 28rem),
+    linear-gradient(135deg, #05060a, #0b1015 45%, #05070d);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.shell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  padding: clamp(12px, 2vw, 28px);
+}
+
+#game {
+  width: min(100%, calc(100vh * 1.777));
+  max-height: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid rgba(25, 230, 255, 0.34);
+  background: #05070a;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 0 48px rgba(25, 230, 255, 0.16);
+}
+
+.hud {
+  position: absolute;
+  top: clamp(16px, 3vw, 36px);
+  z-index: 2;
+  display: grid;
+  gap: 14px;
+  min-width: 190px;
+  padding: 14px;
+  border: 1px solid rgba(127, 154, 165, 0.25);
+  background: var(--panel);
+  backdrop-filter: blur(14px);
+}
+
+.hud-left {
+  left: clamp(16px, 3vw, 36px);
+}
+
+.hud-right {
+  right: clamp(16px, 3vw, 36px);
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+strong {
+  font-size: 1.55rem;
+  line-height: 1;
+  text-shadow: 0 0 14px rgba(25, 230, 255, 0.6);
+}
+
+.hud p {
+  margin: 0;
+  color: #cde8ef;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.meter {
+  width: 160px;
+  height: 9px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.meter span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--red), var(--amber));
+  box-shadow: 0 0 16px rgba(255, 77, 125, 0.75);
+  transform-origin: left center;
+}
+
+.meter-cyan span {
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  box-shadow: 0 0 16px rgba(25, 230, 255, 0.8);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background:
+    linear-gradient(rgba(3, 5, 8, 0.28), rgba(3, 5, 8, 0.72)),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 4px);
+}
+
+.overlay.hidden {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.panel {
+  width: min(540px, 100%);
+  padding: 32px;
+  border: 1px solid rgba(25, 230, 255, 0.38);
+  background: rgba(5, 10, 16, 0.86);
+  box-shadow: 0 0 52px rgba(25, 230, 255, 0.18);
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--green);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.7rem, 8vw, 5.8rem);
+  line-height: 0.9;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.brief {
+  max-width: 32rem;
+  margin: 18px 0 26px;
+  color: #c6dbe2;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+#startButton {
+  min-width: 160px;
+  min-height: 44px;
+  border: 1px solid rgba(108, 255, 157, 0.7);
+  background: linear-gradient(90deg, rgba(25, 230, 255, 0.22), rgba(108, 255, 157, 0.32));
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#startButton:hover,
+#startButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 28px rgba(108, 255, 157, 0.38);
+}
+
+@media (max-width: 820px) {
+  .shell {
+    align-items: center;
+    padding: 8px;
+  }
+
+  .hud {
+    top: auto;
+    bottom: 12px;
+    min-width: 0;
+    width: calc(50% - 18px);
+    padding: 10px;
+  }
+
+  .hud-left {
+    left: 12px;
+  }
+
+  .hud-right {
+    right: 12px;
+  }
+
+  .meter {
+    width: 100%;
+  }
+
+  strong {
+    font-size: 1.15rem;
+  }
+
+  .hud p {
+    font-size: 0.76rem;
+  }
+}

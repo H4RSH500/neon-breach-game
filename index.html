@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Neon Breach</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hud hud-left" aria-label="Mission telemetry">
+        <div>
+          <span class="label">Score</span>
+          <strong id="score">000000</strong>
+        </div>
+        <div>
+          <span class="label">Integrity</span>
+          <div class="meter"><span id="healthBar"></span></div>
+        </div>
+        <div>
+          <span class="label">Charge</span>
+          <div class="meter meter-cyan"><span id="chargeBar"></span></div>
+        </div>
+      </section>
+
+      <canvas id="game" width="1280" height="720" aria-label="Neon Breach game canvas"></canvas>
+
+      <section class="hud hud-right" aria-label="Controls">
+        <div>
+          <span class="label">Sector</span>
+          <strong id="wave">01</strong>
+        </div>
+        <div>
+          <span class="label">Controls</span>
+          <p>WASD / Arrows move<br>Space pulse<br>P pause</p>
+        </div>
+      </section>
+
+      <section id="overlay" class="overlay">
+        <div class="panel">
+          <p class="eyebrow">CYBERNETIC FIREWALL</p>
+          <h1>Neon Breach</h1>
+          <p class="brief">
+            Thread the interceptor through a hostile data grid. Collect cores,
+            dodge sentries, and trigger pulse blasts when the breach closes in.
+          </p>
+          <button id="startButton" type="button">Start Run</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
